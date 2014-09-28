@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Foundation\Application;
 
 class RoutingRouteTest extends PHPUnit_Framework_TestCase {
 
@@ -76,11 +77,15 @@ class RoutingRouteTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('hello', $router->dispatch(Request::create('foo/bar/%C3%A5%CE%B1%D1%84', 'GET'))->getContent());
 	}
 
-
 	public function testRouteDispatchingWithParameters()
 	{
 		$router = $this->getRouter();
-		$router->get('api', function() { return Request::has('foo') ? 'true' : 'false'; });
+		$router->get('api', function()
+		{
+			$app = new Application();
+
+			return $app->request->has('foo') ? 'true' : 'false';
+		});
 		$this->assertEquals('true', $router->dispatch(Request::create('api', 'GET', array('foo' => array('bar', 'baz'))))->getContent());
 	}
 
