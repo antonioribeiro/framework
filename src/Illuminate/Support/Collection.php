@@ -273,11 +273,14 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     /**
      * Dump the collection and end the script.
      *
+     * @param  mixed  $args
      * @return void
      */
-    public function dd()
+    public function dd(...$args)
     {
-        dd($this->all());
+        call_user_func_array([$this, 'dump'], $args);
+
+        die(1);
     }
 
     /**
